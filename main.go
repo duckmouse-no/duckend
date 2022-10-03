@@ -36,7 +36,7 @@ func main() {
 
 func createCheckoutSession(w http.ResponseWriter, r *http.Request) {
   priceId := os.Getenv("PRICE_ID")
-  domain := "http://46.101.120.64"
+  domain := "https://localhost:8000"
   params := &stripe.CheckoutSessionParams{
     LineItems: []*stripe.CheckoutSessionLineItemParams{
       &stripe.CheckoutSessionLineItemParams{
