@@ -41,13 +41,34 @@ func createCheckoutSession(w http.ResponseWriter, r *http.Request) {
     LineItems: []*stripe.CheckoutSessionLineItemParams{
       &stripe.CheckoutSessionLineItemParams{
         Price: stripe.String(priceId),
+        AdjustableQuantity: &stripe.CheckoutSessionLineItemAdjustableQuantityParams{
+          Enabled: stripe.Bool(true),
+          Minimum: stripe.Int64(1),
+          Maximum: stripe.Int64(50),
+        },
         Quantity: stripe.Int64(1),
       },
     },
     Mode: stripe.String(string(stripe.CheckoutSessionModePayment)),
-    SuccessURL: stripe.String(domain + "?success=true"),
-    CancelURL: stripe.String(domain + "?canceled=true"),
-    AutomaticTax: &stripe.CheckoutSessionAutomaticTaxParams{Enabled: stripe.Bool(true)},
+    SuccessURL: stripe.String("https://duckmouse.no" + "/takk"),
+    CancelURL: stripe.String("https://duckmouse.no"),
+    AutomaticTax: &stripe.CheckoutSessionAutomaticTaxParams{Enabled: stripe.Bool(false)},
+      PhoneNumberCollection: &stripe.CheckoutSessionPhoneNumberCollectionParams{
+      Enabled: stripe.Bool(true),
+    },
+    ShippingAddressCollection: &stripe.CheckoutSessionShippingAddressCollectionParams{
+      AllowedCountries: stripe.StringSlice([]string{
+        "NO",
+      }),
+    },
+    ShippingOptions: []*stripe.CheckoutSessionShippingOptionParams{
+      &stripe.CheckoutSessionShippingOptionParams{
+        ShippingRate: stripe.String("shr_1Lk4hHC8GFiqryiro7dDaiv8"),
+      },
+      &stripe.CheckoutSessionShippingOptionParams{
+        ShippingRate: stripe.String("shr_1Lp5OSC8GFiqryirjRWIYOBQ"),
+      },
+    },
   }
 
   s, err := session.New(params)
